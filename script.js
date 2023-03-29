@@ -148,7 +148,7 @@ function updateShopItems() {
             <button class="remove btn btn-danger"><i class="fas fa-trash"></i></button>
         </li>
         `;
-    }).join();
+    }).join('');
 
     // sepete yazdırma
     shoppingCart.innerHTML = shoppingCartItem;
