@@ -6,4 +6,6 @@
 
 [StoreApp](https://g-guney.github.io/StoreApp/)
 
-### Sonraki versiyonlarında Sepete ürün ekleme,silme, sepetteki ürün sayısını arrtırma işlevleride eklenecek
+### Sonraki versiyonlarında Sepete ürün ekleme,silme (eklendi)
+
+###sepetteki ürün sayısını arrtırma işlevleride eklenecek
