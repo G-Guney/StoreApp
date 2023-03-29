@@ -13,3 +13,56 @@
 .card-btns {
     margin-bottom: 10px;
 }
+.shopping-cart {
+    display: none;
+    width: 400px;
+    min-height: 100px;
+    position: absolute;
+    right: 5%;
+    top: 60px;
+    z-index: 10;
+}
+.shop-item {
+    width: 100%;
+}
+.shop-item img {
+    width: 50px;
+    height: 50px;
+}
+@media screen and (max-width:1024px) {
+    .shopping-cart {
+        width: 300px;
+    }
+    .shop-item {
+        width: 100%;
+    }
+    .shop-item img {
+        width: 50px;
+        height: 50px;
+    }
+}
+@media screen and (max-width:768px) {
+    .shopping-cart {
+        width: 200px;
+        font-size: 12px;
+        top: 100px;
+    }
+    .remove {
+        font-size: 12px;
+        width: 50px;
+    }
+    .btn-container {
+        flex-wrap: wrap;
+    }
+}
+@media screen and (max-width:435px) {
+    .shopping-cart {
+        width: 200px;
+        font-size: 12px;
+        top: 100px;
+    }
+    .shop-item img {
+        width: 30px;
+        height: 30px;
+    }
+}

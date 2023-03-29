@@ -5,15 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>StoreApp</title>
+    <!-- fontawesome -->
+    <script src="https://kit.fontawesome.com/fa81fd021d.js" crossorigin="anonymous"></script>
     <!-- bootstrap -->
     <link rel="stylesheet" href="css/bootstrap.min.css" />
     <!-- main css -->
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
-    <div class="shopping-cart" id="shopCart">
+    <!-- shopping-cart start-->
+    <ul class="shopping-cart list-unstyled p-2 bg-info rounded-3 " id="shopCart">
 
-    </div>
+    </ul>
+    <!-- shopping-cart end-->
+
     <!-- buttons start -->
     <div class="container">
       <div class="btn-container btn-group d-flex mt-4">
@@ -22,6 +27,7 @@
         <button class="btn-item btn btn-primary" data-category="men's clothing">Men's Clothing</button>
         <button class="btn-item btn btn-primary" data-category="jewelery">Jewelery</button>
         <button class="btn-item btn btn-primary" data-category="electronics">Electronics</button>
+        <button class="btn btn-dark" id="cartBtn"><i class="fas fa-shopping-cart"></i></button>
       </div>
     </div>
     <!-- buttons end -->

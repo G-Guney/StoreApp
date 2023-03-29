@@ -2,6 +2,17 @@
 const productContainer = document.getElementById('product-container');
 const btnDiv = document.querySelector('.btn-container');
 const shoppingCart = document.getElementById('shopCart');
+const cartButton = document.getElementById('cartBtn');
+// sepetimimize tıklanınca açılır kapanır yapacağız
+
+cartButton.addEventListener('click', () => {
+    if (shoppingCart.style.display === 'none') {
+        shoppingCart.style.display = 'block';
+    } else {
+        shoppingCart.style.display = 'none';
+    }
+});
+
 
 // Sepete eklenen ürünlerimizi saklayacağımız bir dizi oluşturuyoruz ilk başta boş olacak
 let shopItems = [];
@@ -21,7 +32,7 @@ async function productsFromApi() {
         filterProducs(products);
     }
     catch (error) {
-        console.log('Ürünlerin yüklenmesinde sorun çıktı. Hata :' , error);
+        console.log('Ürünlerin yüklenmesinde sorun çıktı. Hata :', error);
     }
 };
 /* Şimdi ürümlerimizi ekrana yazdırma işlemi için bir fonlsiyon oluşturacağız, bu fonksiyon API'den alaınan verileri işleyecek , API'den async ile veri aldığımız için bu fonksiyonu productsFromApi()'nin dışından çağıramayız. Oluşturduktan sonra içerisine yazacağız
@@ -48,8 +59,15 @@ function displayProducts(products) {
     }).join(''); // join() metodu kullanma sebebimiz map() metodu kullandığımızda verileri bir diziye ekler ve aralarında virgül olur virgülü kaldırmak için kullanırız.
     // ürün cardlarını oluşturduk şimdi ekrana yazdıralım
     productContainer.innerHTML = productCard;
+
+    // ürünlerimiz eklendiğinde sepete ekleme butonu ile gelecek butonlara event listener ile bir fonksiyon tanıyacağız
+
+    const addCartButtons = document.querySelectorAll('.add-to-cart');
+    addCartButtons.forEach((button) => {
+        button.addEventListener('click', addToCart);
+        // butonların hepsine bu fonksiyon tanımlandı, aşağıda fonksiyonumuzu tanımlayacağız
+    })
 };
-productsFromApi();
 
 //Ürünleri filtrelemek için bir fonksiyonm oluşturacağız
 
@@ -60,7 +78,7 @@ function filterProducs(products) {
         // e.target ile valuesine ulaşabiliriz
         if (e.target.classList.contains('btn-item')) {
             const category = e.target.dataset.category;
-            if(category) {
+            if (category) {
                 // buton all ise hepsini gösterecek
                 // değilse categorisine göre
                 const filterProducs = category === 'all' ? products : products.filter((product) => product.category === category);
@@ -72,3 +90,70 @@ function filterProducs(products) {
     })
 };
 
+// SEpete ürün Ekleme işlevi için fonksiyon yazacağız
+
+function addToCart(e) {
+    // butonla oluşturulken ürünlerin id'si butonlara eklendi id' kllanarak işlem yapacağız
+    // öncelikle id'yi alalım
+    const id = e.target.dataset.id;
+    /* id aldık öncelikle yapmamız gereken shopItems dizisinde bu id'yi taratmak ,taratma sebebimiz eğer sepetimizde bu id ile eşleşen ürün var ise sepetteki sayısını arttıracağız yok ise sepete sıfırdan ekleyeceğiz*/
+    const item = shopItems.find((item) => item.id === id);
+
+    if (item) {
+        item.count += 1;
+    }
+    else {
+        const product = {
+            id: id,
+            count: 1,
+            // sepette image ve price göstermek için ürüne ait olanlarıda burada eklememiz gerekli
+            image: e.target.parentElement.parentElement.querySelector('.card-img').src,
+            price: e.target.parentElement.parentElement.querySelector('.card-title').nextElementSibling.innerText,
+        };
+        console.log(product);
+        shopItems.push(product);
+    }
+    // ürün il defa ekleniyorsa ürüne butondanb aldığımız id'yi verdik ve başlangıçta sepetteki sayısına 1 değerini verdik
+
+    // sepete ekleme işlemi tamamlandığına göre sepeti güncellememiz gerekli bunun için bir fonk yazacağız , ekleme fonksiyonunada bu fonksiyonu yazmamız gerekecek
+    updateShopItems();
+}
+// Sepetten ürün silme
+function removeItemFromCart() {
+    // remove butonlarını seçelim
+    const removeButtons = document.querySelectorAll('.remove');
+
+    // event ekleyerek sepetten çıkaracağız
+    removeButtons.forEach((button) => {
+        button.addEventListener('click', (e) => {
+            // burada closest metodu kullandık en yakın parenti alacak
+            const id = e.target.closest('.shop-item').querySelector('.shop-price').dataset.id;
+            // id 'si eşleşmeyenler sepette kalacak
+            shopItems = shopItems.filter((item) => item.id !== id);
+
+            // Sepeti güncelliyoruz
+            updateShopItems();
+        });
+    });
+}
+
+// ürün güncelleme fonskiyonu - ürün silme fonksiyonunda içerir
+function updateShopItems() {
+    const shoppingCartItem = shopItems.map((item) => {
+        return `
+        <li class="shop-item d-flex justify-content-between align-items-center p-2" >
+            <img src="${item.image}" alt="">
+            <div class="shop-price text-white" data-id="${item.id}">${item.price}</div>
+            <span class="count text-white">${item.count}</span>
+            <button class="remove btn btn-danger"><i class="fas fa-trash"></i></button>
+        </li>
+        `;
+    }).join();
+
+    // sepete yazdırma
+    shoppingCart.innerHTML = shoppingCartItem;
+    removeItemFromCart();
+}
+
+
+productsFromApi();
